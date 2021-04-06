@@ -49,7 +49,7 @@ char *MonthName(const int month)
 
 int main(void)
 {
-	const int JAN = 0, DEC = 12;
+	const int JAN = 1, DEC = 12;
 	int year, month;
 	bool valid = true;
 
