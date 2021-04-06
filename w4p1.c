@@ -169,5 +169,6 @@ int main(void)
 		Finance[i] = GetFinance();
 	}
 	PrintFormattedOutput(items, Costs, Priority, Finance, CalculateTotalCost(items, Costs));
+	printf("\nBest of luck in all your future endeavours!\n");
 	return 0;
 }
