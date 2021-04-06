@@ -140,7 +140,8 @@ int main(void)
 	totalOverallRating = totalMorningRating + totalEveningRating;
 	avgMorningRating = totalMorningRating / LOG_DAYS;
 	avgEveningRating = totalEveningRating / LOG_DAYS;
-	avgOverallRating = (avgMorningRating + avgEveningRating) / LOG_DAYS * 2;
+
+	avgOverallRating = (avgMorningRating + avgEveningRating) / 2;
 
 	printf("Summary\n");
 	printf("=======\n");
