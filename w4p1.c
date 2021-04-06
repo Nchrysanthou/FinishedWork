@@ -18,6 +18,9 @@
 #define MIN_ITEMS 1
 #define MAX_ITEMS 10
 
+#define PRIO_MIN 1
+#define PRIO_MAX 3
+
 void PrintHeader()
 {
 	printf("+--------------------------+\n");
@@ -52,7 +55,7 @@ int GetItemsToForcast()
 	return items;
 }
 
-double GetPrice(const int items)
+double GetPrice(const int index)
 {
 	int i = 0;
 	double price = 0.00;
@@ -60,7 +63,7 @@ double GetPrice(const int items)
 
 	do
 	{
-		printf("Item-%d Details:\n", i + 1);
+		printf("Item-%d Details:\n", index);
 		printf("Item cost: $");
 		scanf("%lf", &price);
 		if (price < 100.00)
@@ -72,25 +75,52 @@ double GetPrice(const int items)
 			return price;
 	} while (!valid);
 }
-char GetFinance(const int Items)
+
+int GetPriority()
+{
+	int prio = 0;
+	bool valid = false;
+	do
+	{
+		printf("How important is it to you? [1=must have, 2=important, 3=want]: ");
+		scanf("%d", &prio);
+
+		if (prio < PRIO_MIN || prio > PRIO_MAX)
+		{
+			printf("ERROR: Value must be between 1 and 3\n");
+			valid = false;
+		}
+		else
+		{
+			valid = true;
+			return prio;
+		}
+	} while (!valid);
+	return 0;
+}
+
+char GetFinance()
 {
 	bool valid = false;
 
-	char yn = "\0";
+	char yesNo;
+
 	do
 	{
 		printf("Does this item have financing options? [y/n]: ");
-		yn = getchar();
+		fflush(stdin);
+		scanf("%c", &yesNo);
 
-		if (yn != 'y' || yn != 'n')
+		if (yesNo == 'y' || yesNo == 'n')
+			valid = true;
+
+		else
 		{
 			printf("ERROR: Must be a lowercase \'y\' or \'n\'\n");
 			valid = false;
 		}
-		else
-			valid = true;
 	} while (!valid);
-	return yn;
+	return yesNo;
 }
 
 double CalculateTotalCost(const int items, double costs[])
@@ -108,8 +138,8 @@ void PrintFormattedOutput(const int itemsToPrint, double costs[], int priority[]
 	printf("Item Priority Financed        Cost\n");
 	printf("---- -------- -------- -----------\n");
 	for (i = 0; i < itemsToPrint; i++)
-		printf("%3d %5d %5c %11.2lf\n", i + 1, priority[i], financed[i], costs[i]);
-	printf("                  $%11.2lf\n\n", totalCost);
+		printf("%3d  %5d   %5c     %11.2lf\n", i + 1, priority[i], financed[i], costs[i]);
+	printf("                      $%11.2lf\n\n", totalCost);
 }
 
 int main(void)
@@ -134,8 +164,9 @@ int main(void)
 
 	for (i = 0; i < items; i++)
 	{
-		Costs[i] = GetPrice(items);
-		Finance[i] = GetFinance(items);
+		Costs[i] = GetPrice(i + 1);
+		Priority[i] = GetPriority();
+		Finance[i] = GetFinance();
 	}
 	PrintFormattedOutput(items, Costs, Priority, Finance, CalculateTotalCost(items, Costs));
 	return 0;
